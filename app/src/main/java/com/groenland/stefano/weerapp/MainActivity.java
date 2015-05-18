@@ -1,20 +1,42 @@
 package com.groenland.stefano.weerapp;
 
+import android.content.Context;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TableLayout;
+import android.widget.Toast;
 
 
 public class MainActivity extends ActionBarActivity {
 
    EditText enterCity;
    EditText enterShortname;
+   Button btnTag;
+   Button btnEdit;
 
     public void btnSave (View view) {
           enterCity.setText("Save knop");
+
+
+        LayoutInflater layoutInflater = (LayoutInflater)
+                getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View newRow =
+                layoutInflater.inflate(R.layout.newtagtablerow, null);
+        btnTag = (Button) newRow.findViewById(R.id.newTagButton);
+        btnEdit = (Button) newRow.findViewById(R.id.newEditButton);
+
+        TableLayout tagsTableLayout = (TableLayout)
+                findViewById(R.id.queryTableLayout);
+        tagsTableLayout.addView(newRow);
+        btnTag.setOnClickListener(tagButtonListener);
+        btnEdit.setOnClickListener(editButtonListener);
+
     }
     public void btnClear(View view){
         enterShortname.setText("Clear knop.");
@@ -22,12 +44,32 @@ public class MainActivity extends ActionBarActivity {
 
 
 
+
+    private View.OnClickListener tagButtonListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            String tag = ((Button)v).getText().toString();
+            Toast.makeText(getApplicationContext(), tag,
+                    Toast.LENGTH_LONG).show();
+        }
+    };
+    private View.OnClickListener editButtonListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            String tag = ((Button)v).getText().toString();
+            Toast.makeText(getApplicationContext(), tag,
+                    Toast.LENGTH_LONG).show();
+        }
+    };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         enterCity = (EditText) findViewById(R.id.enterCity);
         enterShortname = (EditText) findViewById(R.id.enterShortname);
+
+
     }
 
 
