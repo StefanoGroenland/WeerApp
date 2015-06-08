@@ -12,6 +12,8 @@ import android.widget.EditText;
 import android.widget.TableLayout;
 import android.widget.Toast;
 
+import java.util.List;
+
 
 public class MainActivity extends ActionBarActivity {
 
@@ -19,31 +21,32 @@ public class MainActivity extends ActionBarActivity {
    EditText enterShortname;
    Button btnTag;
    Button btnEdit;
+    BierWeerDatabaseHandler db;
 
     public void btnSave (View view) {
-          enterCity.setText("Save knop");
+        addEntry(enterCity.getText().toString(),enterShortname.getText().toString());
+    }
+    public void btnClear(View view){
+        enterShortname.setText("Clear knop.");
+    }
 
-
+    private void addEntry(String naam, String plaats) {
+        BierWeer bw = new BierWeer();
+        bw.setPlaats(enterCity.getText().toString());
+        bw.setNaam(enterShortname.getText().toString());
+        db.addRecord(bw);
+        btnTag.setText(enterShortname.getText());
         LayoutInflater layoutInflater = (LayoutInflater)
                 getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View newRow =
                 layoutInflater.inflate(R.layout.newtagtablerow, null);
         btnTag = (Button) newRow.findViewById(R.id.newTagButton);
         btnEdit = (Button) newRow.findViewById(R.id.newEditButton);
-
+        btnTag.setText(naam);
         TableLayout tagsTableLayout = (TableLayout)
                 findViewById(R.id.queryTableLayout);
         tagsTableLayout.addView(newRow);
-        btnTag.setOnClickListener(tagButtonListener);
-        btnEdit.setOnClickListener(editButtonListener);
-
     }
-    public void btnClear(View view){
-        enterShortname.setText("Clear knop.");
-    }
-
-
-
 
     private View.OnClickListener tagButtonListener = new View.OnClickListener() {
         @Override
@@ -68,7 +71,11 @@ public class MainActivity extends ActionBarActivity {
         setContentView(R.layout.activity_main);
         enterCity = (EditText) findViewById(R.id.enterCity);
         enterShortname = (EditText) findViewById(R.id.enterShortname);
-
+        db = new BierWeerDatabaseHandler(this);
+        List<BierWeer> list =  db.getBierWeer();
+        for(BierWeer bw : list){
+            addEntry(bw.getNaam(),bw.getPlaats());
+        }
 
     }
 
