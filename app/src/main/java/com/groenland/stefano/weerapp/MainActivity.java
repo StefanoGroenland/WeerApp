@@ -1,6 +1,7 @@
 package com.groenland.stefano.weerapp;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -21,27 +22,27 @@ public class MainActivity extends ActionBarActivity {
    EditText enterShortname;
    Button btnTag;
    Button btnEdit;
+    Button btnClear;
     BierWeerDatabaseHandler db;
 
     public void btnSave (View view) {
-        addEntry(enterCity.getText().toString(),enterShortname.getText().toString());
-    }
-    public void btnClear(View view){
-        enterShortname.setText("Clear knop.");
-    }
-
-    private void addEntry(String naam, String plaats) {
         BierWeer bw = new BierWeer();
         bw.setPlaats(enterCity.getText().toString());
         bw.setNaam(enterShortname.getText().toString());
         db.addRecord(bw);
-        btnTag.setText(enterShortname.getText());
+        addEntry(enterShortname.getText().toString(),enterCity.getText().toString());
+    }
+
+    private void addEntry(String naam, String plaats) {
+
         LayoutInflater layoutInflater = (LayoutInflater)
                 getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View newRow =
                 layoutInflater.inflate(R.layout.newtagtablerow, null);
+
         btnTag = (Button) newRow.findViewById(R.id.newTagButton);
         btnEdit = (Button) newRow.findViewById(R.id.newEditButton);
+        btnTag.setOnClickListener(tagButtonListener);
         btnTag.setText(naam);
         TableLayout tagsTableLayout = (TableLayout)
                 findViewById(R.id.queryTableLayout);
@@ -54,6 +55,9 @@ public class MainActivity extends ActionBarActivity {
             String tag = ((Button)v).getText().toString();
             Toast.makeText(getApplicationContext(), tag,
                     Toast.LENGTH_LONG).show();
+            Intent intent = new Intent(MainActivity.this, tweedeScherm.class);
+            intent.putExtra("Naam", btnTag.getText().toString());
+            startActivity(intent);
         }
     };
     private View.OnClickListener editButtonListener = new View.OnClickListener() {
@@ -64,6 +68,13 @@ public class MainActivity extends ActionBarActivity {
                     Toast.LENGTH_LONG).show();
         }
     };
+    private View.OnClickListener clearButtonListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+             db.emptyBierWeer();
+            Toast.makeText(getApplicationContext(), "Clear!" , Toast.LENGTH_LONG).show();
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,12 +82,13 @@ public class MainActivity extends ActionBarActivity {
         setContentView(R.layout.activity_main);
         enterCity = (EditText) findViewById(R.id.enterCity);
         enterShortname = (EditText) findViewById(R.id.enterShortname);
+        btnClear = (Button) findViewById(R.id.btnClear);
+        btnClear.setOnClickListener(clearButtonListener);
         db = new BierWeerDatabaseHandler(this);
         List<BierWeer> list =  db.getBierWeer();
         for(BierWeer bw : list){
-            addEntry(bw.getNaam(),bw.getPlaats());
+                addEntry(bw.getNaam(),bw.getPlaats());
         }
-
     }
 
 

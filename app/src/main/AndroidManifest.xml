@@ -16,6 +16,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".tweedeScherm"
+            android:label="@string/title_activity_tweede_scherm" >
+        </activity>
     </application>
 
 </manifest>
