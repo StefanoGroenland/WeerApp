@@ -2,6 +2,8 @@ package com.groenland.stefano.weerapp;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
+import android.os.StrictMode;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -12,6 +14,12 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TableLayout;
 import android.widget.Toast;
+
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.params.BasicHttpParams;
 
 import java.util.List;
 
@@ -25,12 +33,13 @@ public class MainActivity extends ActionBarActivity {
     Button btnClear;
     BierWeerDatabaseHandler db;
 
+
     public void btnSave (View view) {
         BierWeer bw = new BierWeer();
         bw.setPlaats(enterCity.getText().toString());
         bw.setNaam(enterShortname.getText().toString());
         db.addRecord(bw);
-        addEntry(enterShortname.getText().toString(),enterCity.getText().toString());
+        addEntry(enterShortname.getText().toString(), enterCity.getText().toString());
     }
 
     private void addEntry(String naam, String plaats) {
@@ -89,6 +98,9 @@ public class MainActivity extends ActionBarActivity {
         for(BierWeer bw : list){
                 addEntry(bw.getNaam(),bw.getPlaats());
         }
+        StrictMode.ThreadPolicy policy = new
+                StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
     }
 
 
@@ -114,4 +126,7 @@ public class MainActivity extends ActionBarActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
+
 }
+

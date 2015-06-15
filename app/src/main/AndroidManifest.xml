@@ -20,6 +20,9 @@
             android:name=".tweedeScherm"
             android:label="@string/title_activity_tweede_scherm" >
         </activity>
+        <uses-permission
+            android:name="android.permission.INTERNET">
+        </uses-permission>
     </application>
 
 </manifest>
