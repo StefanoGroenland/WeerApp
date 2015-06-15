@@ -12,6 +12,8 @@ import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.params.BasicHttpParams;
+import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
@@ -21,6 +23,8 @@ import java.io.InputStreamReader;
 public class tweedeScherm extends ActionBarActivity {
 
     TextView nameTag;
+    TextView place;
+    TextView temp;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +43,8 @@ public class tweedeScherm extends ActionBarActivity {
         myTask.execute();
 
         nameTag = (TextView) findViewById(R.id.nameTag);
+        place = (TextView) findViewById(R.id.Place);
+        temp = (TextView) findViewById(R.id.Temp);
         nameTag.setText(naam);
 
     }
@@ -78,7 +84,7 @@ public class tweedeScherm extends ActionBarActivity {
                 DefaultHttpClient httpClient = new DefaultHttpClient(
                         new BasicHttpParams());
                 HttpPost httpPost = new HttpPost(
-                        ("http://api.openweathermap.org/data/2.5/weather?q=") + this.city + ",NL");
+                        ("http://api.openweathermap.org/data/2.5/weather?q=" + this.city + ",NL"));
                 httpPost.setHeader("Content-type", "application/json");
                 HttpResponse httpResponse = httpClient.execute(httpPost);
 
@@ -104,6 +110,20 @@ public class tweedeScherm extends ActionBarActivity {
 
         @Override
         protected void onPostExecute(String s) {
+
+
+            try {
+                JSONObject obj = new JSONObject(s);
+                String plaatsNaam = obj.getString("name");
+                JSONObject mainInfo = obj.getJSONObject("main");
+                Long temperature = mainInfo.getLong("temp");
+                temperature = temperature - 273;
+                temp.setText(temperature.toString());
+                place.setText(plaatsNaam);
+            }
+            catch (Exception e){
+                System.out.println("JSON Exception");
+            }
             super.onPostExecute(s);
         }
     }

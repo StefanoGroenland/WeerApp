@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.groenland.stefano.weerapp" >
-
+    <uses-permission
+        android:name="android.permission.INTERNET">
+    </uses-permission>
     <application
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
@@ -20,9 +22,7 @@
             android:name=".tweedeScherm"
             android:label="@string/title_activity_tweede_scherm" >
         </activity>
-        <uses-permission
-            android:name="android.permission.INTERNET">
-        </uses-permission>
+
     </application>
 
 </manifest>
