@@ -32,17 +32,21 @@ public class MainActivity extends ActionBarActivity {
    Button btnEdit;
     Button btnClear;
     BierWeerDatabaseHandler db;
+//    toets
+    EditText landCode;
 
 
     public void btnSave (View view) {
         BierWeer bw = new BierWeer();
         bw.setPlaats(enterCity.getText().toString());
         bw.setNaam(enterShortname.getText().toString());
+//        toets
+        bw.setLandcode(landCode.getText().toString());
         db.addRecord(bw);
-        addEntry(enterShortname.getText().toString(), enterCity.getText().toString());
+        addEntry(enterShortname.getText().toString(), enterCity.getText().toString(), landCode.getText().toString());
     }
-
-    private void addEntry(String naam, String plaats) {
+//toets
+    private void addEntry(String naam, String plaats, String landcode) {
 
         LayoutInflater layoutInflater = (LayoutInflater)
                 getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -66,6 +70,8 @@ public class MainActivity extends ActionBarActivity {
                     Toast.LENGTH_LONG).show();
             Intent intent = new Intent(MainActivity.this, tweedeScherm.class);
             intent.putExtra("Naam", btnTag.getText().toString());
+//            toets
+            intent.putExtra("Landcode", landCode.getText().toString());
             startActivity(intent);
         }
     };
@@ -91,12 +97,15 @@ public class MainActivity extends ActionBarActivity {
         setContentView(R.layout.activity_main);
         enterCity = (EditText) findViewById(R.id.enterCity);
         enterShortname = (EditText) findViewById(R.id.enterShortname);
+//        toets
+        landCode = (EditText) findViewById(R.id.landCode);
         btnClear = (Button) findViewById(R.id.btnClear);
         btnClear.setOnClickListener(clearButtonListener);
         db = new BierWeerDatabaseHandler(this);
         List<BierWeer> list =  db.getBierWeer();
         for(BierWeer bw : list){
-                addEntry(bw.getNaam(),bw.getPlaats());
+//            toets
+                addEntry(bw.getNaam(), bw.getPlaats(),bw.getLandcode());
         }
         StrictMode.ThreadPolicy policy = new
                 StrictMode.ThreadPolicy.Builder().permitAll().build();

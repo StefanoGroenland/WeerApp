@@ -15,7 +15,8 @@ import java.util.List;
 public class BierWeerDatabaseHandler extends SQLiteOpenHelper {
 
     // Naamgeving van de database en tabel middels constanten
-    private static final int DATABASE_VERSION = 1;
+//    toets
+    private static final int DATABASE_VERSION = 9;
     private static final String DATABASE_NAME = "weerapp.db"; // Let op, gebruik .db als extensie
     private static final String BIERWEER_TABLE = "users";
 
@@ -23,6 +24,8 @@ public class BierWeerDatabaseHandler extends SQLiteOpenHelper {
     private static final String KEY_ID = "id";
     private static final String PLAATS = "locatie";
     private static final String NAAM = "naam";
+//    toets
+    private static final String LANDCODE = "land";
 
 
     // De constructor. Deze zorgt ervoor dat de juiste initialisatie plaats vind. Als de database
@@ -34,11 +37,14 @@ public class BierWeerDatabaseHandler extends SQLiteOpenHelper {
 
     // In de onCreate komt alle code om de tabellen die nodig zijn te maken. Dat gebeurd door
     // een SQL statement samen te stellen en uit te voeren.
+//    toets
     @Override
     public void onCreate(SQLiteDatabase db) {
         String CREATE_BIERWEER_TABLE = "CREATE TABLE " + BIERWEER_TABLE + "(" +
-                KEY_ID + " INTEGER PRIMARY KEY," + PLAATS + " TEXT," + NAAM +
-                " TEXT" + ")";
+                KEY_ID + " INTEGER PRIMARY KEY,"
+                + PLAATS + " TEXT,"
+                + NAAM + " TEXT,"
+                + LANDCODE + " TEXT " + ")";
         db.execSQL(CREATE_BIERWEER_TABLE);
     }
 
@@ -63,6 +69,7 @@ public class BierWeerDatabaseHandler extends SQLiteOpenHelper {
         ContentValues values = new ContentValues();
         values.put(PLAATS, record.getPlaats());
         values.put(NAAM, record.getNaam());
+        values.put(LANDCODE, record.getLandcode());
 
         db.insert(BIERWEER_TABLE, null, values);
         db.close();
@@ -79,6 +86,18 @@ public class BierWeerDatabaseHandler extends SQLiteOpenHelper {
         }
         return "";
     }
+
+//    toets
+public String zoekLand(String naam) {
+    SQLiteDatabase db = this.getReadableDatabase();
+
+    Cursor cursor = db.rawQuery("SELECT " + LANDCODE + " FROM " + BIERWEER_TABLE + " WHERE " + NAAM + "='" + naam + "';", null);
+    if (cursor.moveToFirst()) {
+        return cursor.getString(0);
+    }
+    return "";
+}
+
 
     // emptyBierWeer maakt de tabel leeg. Wat gebeurd er als er door upgrades meer tabel in de database
     // zitten met de andere tabellen?
@@ -106,6 +125,8 @@ public class BierWeerDatabaseHandler extends SQLiteOpenHelper {
                 bierWeer.setId(Integer.parseInt(cursor.getString(0)));
                 bierWeer.setPlaats(cursor.getString(1));
                 bierWeer.setNaam(cursor.getString(2));
+//                toets
+                bierWeer.setLandcode(cursor.getString(3));
                 bierWeerList.add(bierWeer);
             } while(cursor.moveToNext());
         }

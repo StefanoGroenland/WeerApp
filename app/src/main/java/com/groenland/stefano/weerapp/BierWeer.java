@@ -7,12 +7,24 @@ public class BierWeer {
     int id;
     String plaats;
     String naam;
+
+    //    toets
+    String landcode;
+    public String getLandcode() {
+        return landcode;
+    }
+    public void setLandcode(String landcode) {
+        this.landcode = landcode;
+    }
+
+
     public int getId() {
         return id;
     }
     public void setId(int id) {
         this.id = id;
     }
+
 
     public String getNaam(){
         return naam;

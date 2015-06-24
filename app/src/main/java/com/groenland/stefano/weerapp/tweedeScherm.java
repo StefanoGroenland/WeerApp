@@ -25,20 +25,34 @@ public class tweedeScherm extends ActionBarActivity {
     TextView nameTag;
     TextView place;
     TextView temp;
+//    toets
+    TextView langt;
+    TextView longt;
+    Long latitude;
+    Long lontitude;
+    TextView landcode;
 
+    BierWeerDatabaseHandler db = new BierWeerDatabaseHandler(this);
+
+    BierWeer bw = new BierWeer();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tweede_scherm);
         Bundle extras = getIntent().getExtras();
         String naam = (String) extras.getString("Naam");
+//        toets
+        String landcode = (String) extras.getString("Landcode");
         System.out.println(naam);
+        System.out.println(landcode);
 
         BierWeerDatabaseHandler db = new BierWeerDatabaseHandler(this);
 
         BierWeer bw = new BierWeer();
         bw.setNaam(naam);
         bw.setPlaats(db.zoekPlaats(bw.getNaam()));
+//        toets
+        bw.setLandcode(db.zoekLand(bw.getNaam()));
         MyTask myTask = new MyTask(bw.getPlaats());
         myTask.execute();
 
@@ -46,6 +60,10 @@ public class tweedeScherm extends ActionBarActivity {
         place = (TextView) findViewById(R.id.Place);
         temp = (TextView) findViewById(R.id.Temp);
         nameTag.setText(naam);
+//        toets
+        langt = (TextView) findViewById(R.id.langt);
+        longt = (TextView) findViewById(R.id.longt);
+
 
     }
 
@@ -80,11 +98,12 @@ public class tweedeScherm extends ActionBarActivity {
 
         @Override
         protected String doInBackground(String... params) {
+
             try {
                 DefaultHttpClient httpClient = new DefaultHttpClient(
                         new BasicHttpParams());
                 HttpPost httpPost = new HttpPost(
-                        ("http://api.openweathermap.org/data/2.5/weather?q=" + this.city + ",NL"));
+                        ("http://api.openweathermap.org/data/2.5/weather?q=" + this.city + ","+ db.zoekLand(nameTag.getText().toString())));
                 httpPost.setHeader("Content-type", "application/json");
                 HttpResponse httpResponse = httpClient.execute(httpPost);
 
@@ -118,8 +137,17 @@ public class tweedeScherm extends ActionBarActivity {
                 JSONObject mainInfo = obj.getJSONObject("main");
                 Long temperature = mainInfo.getLong("temp");
                 temperature = temperature - 273;
+//                toets
+                JSONObject coords = obj.getJSONObject("coord");
+                Long lat = coords.getLong("lat");
+                Long lon = coords.getLong("lon");
+
+
                 temp.setText(temperature.toString());
                 place.setText(plaatsNaam);
+                langt.setText(lat.toString());
+                longt.setText(lon.toString());
+
             }
             catch (Exception e){
                 System.out.println("JSON Exception");

@@ -13,7 +13,7 @@
         android:id="@+id/nameTag"/>
 
     <TextView
-        android:text="@string/hello_world"
+        android:text="place"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/Place"
@@ -22,11 +22,29 @@
         android:layout_alignParentStart="true" />
 
     <TextView
-        android:text="@string/hello_world"
+        android:text="temp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/Temp"
         android:layout_below="@+id/Place"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+    <!-- toets-->
+    <TextView
+        android:text="lan"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/langt"
+        android:layout_below="@+id/Temp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+    <!-- toets-->
+    <TextView
+        android:text="lon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/longt"
+        android:layout_below="@+id/langt"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
 
